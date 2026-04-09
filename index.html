@@ -336,8 +336,8 @@ td.col-initiative {
 }
 td.col-description {
   white-space: normal;
-  min-width: 160px;
-  max-width: 240px;
+  min-width: 200px;
+  max-width: 400px;
   line-height: 1.5;
   font-size: 0.72rem;
 }
@@ -736,10 +736,14 @@ function parseCSV(text) {
 
 function statusBadge(val) {
   var lv = val.toLowerCase().trim();
-  if (/^(passed|approved|enacted|enacted \/ defend)/.test(lv)) return '<span class="badge badge-pass">' + val + '</span>';
-  if (/^(failed|rejected|defeated|blocked|blocked \/ did not qualify)/.test(lv)) return '<span class="badge badge-fail">' + val + '</span>';
-  if (/qualified for ballot|on ballot/.test(lv)) return '<span class="badge badge-onballot">' + val + '</span>';
-  if (/collecting|gathering|exploring|exploratory|qualifying|pending|filed/.test(lv)) return '<span class="badge badge-pending">' + val + '</span>';
+  if (/^(passed|approved|enacted|enacted \/ defend)/.test(lv)) return '<span class="badge badge-pass">Enacted</span>';
+  if (/^(failed|rejected|defeated|blocked|blocked \/ did not qualify)/.test(lv)) return '<span class="badge badge-fail">Blocked</span>';
+  if (/qualified for ballot|on ballot/.test(lv)) return '<span class="badge badge-onballot">Qualified</span>';
+  if (/collecting/.test(lv)) return '<span class="badge badge-pending">Collecting</span>';
+  if (/gathering/.test(lv)) return '<span class="badge badge-pending">Gathering</span>';
+  if (/exploring|filed/.test(lv)) return '<span class="badge badge-pending">Exploring</span>';
+  if (/qualifying/.test(lv)) return '<span class="badge badge-pending">Qualifying</span>';
+  if (/pending/.test(lv)) return '<span class="badge badge-pending">Pending</span>';
   return val;
 }
 
