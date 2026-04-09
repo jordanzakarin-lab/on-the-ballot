@@ -326,9 +326,18 @@ td {
 td:last-child, th:last-child { border-right: none; }
 
 /* Description column wraps */
+td.col-initiative {
+  white-space: normal;
+  min-width: 200px;
+  max-width: 420px;
+  line-height: 1.5;
+  font-size: 0.76rem;
+  font-weight: 500;
+}
 td.col-description {
   white-space: normal;
-  max-width: 340px;
+  min-width: 160px;
+  max-width: 240px;
   line-height: 1.5;
   font-size: 0.72rem;
 }
@@ -742,6 +751,8 @@ function buildTable(data, section) {
   // Identify special columns
   var descIdx = headers.map(function(h) { return h.toLowerCase(); }).indexOf('description');
   var statusIdx = headers.map(function(h) { return h.toLowerCase(); }).indexOf('status');
+  var initiativeIdx = headers.map(function(h) { return h.toLowerCase().replace(/[^a-z]/g,''); }).indexOf('initiativemeasure');
+  if (initiativeIdx === -1) initiativeIdx = headers.map(function(h) { return h.toLowerCase(); }).indexOf('initiative');
 
   function render() {
     var pageRows = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
@@ -784,6 +795,7 @@ function buildTable(data, section) {
           }
 
           if (ci === descIdx) td.className = 'col-description';
+          else if (ci === initiativeIdx) td.className = 'col-initiative';
           else td.className = 'col-nowrap';
 
           if (linkUrl) {
