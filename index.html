@@ -542,7 +542,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=787125878',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=787125878&single=true&output=csv',
     },
   },
   {
@@ -552,7 +552,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=1862341304',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=1862341304&single=true&output=csv',
     },
   },
   {
@@ -562,7 +562,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=981912516',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=981912516&single=true&output=csv',
     },
   },
   {
@@ -572,7 +572,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=98531754',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=98531754&single=true&output=csv',
     },
   },
   {
@@ -582,7 +582,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=1209429096',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=1209429096&single=true&output=csv',
     },
   },
   {
@@ -592,7 +592,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=693225214',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=693225214&single=true&output=csv',
     },
   },
   {
@@ -602,7 +602,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=521181472',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=521181472&single=true&output=csv',
     },
   },
   {
@@ -612,7 +612,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=728194009',
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/pub?gid=728194009&single=true&output=csv',
     },
   },
 ];
@@ -682,10 +682,23 @@ function fetchSheetViaGviz(sheetId, gid) {
 
 function fetchSheet(sheetCfg) {
   if (sheetCfg.url && sheetCfg.url !== 'DEMO') {
-    var idMatch = sheetCfg.url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)\/?/);
+    var url = sheetCfg.url;
+
+    // If it's a publish-to-web CSV URL, fetch directly as CSV
+    if (url.indexOf('/pub?') !== -1 && url.indexOf('output=csv') !== -1) {
+      return fetch(url)
+        .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function(text) {
+          var parsed = parseCSV(text);
+          if (!parsed.length) throw new Error('Empty');
+          return { headers: parsed[0], rows: parsed.slice(1) };
+        });
+    }
+
+    var idMatch = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)\/?/);
     if (!idMatch) return Promise.reject(new Error('Invalid URL'));
     var sheetId = idMatch[1];
-    var gidMatch = sheetCfg.url.match(/[#&?]gid=(\d+)/);
+    var gidMatch = url.match(/[#&?]gid=(\d+)/);
     var gid = gidMatch ? gidMatch[1] : '0';
     var promise = GOOGLE_API_KEY
       ? fetchSheetViaAPI(sheetId, gid).catch(function() { return fetchSheetViaGviz(sheetId, gid); })
