@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On the Ballot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #0e0e0e;
+  --paper:      #f5f1e8;
+  --paper-dark: #e9e3d5;
+  --white:      #ffffff;
+  --rule:       #0e0e0e;
+  --blue:       #1a3a6b;
+  --blue-lt:    #e8edf5;
+  --red:        #b82b2b;
+  --gold:       #b8943e;
+  --muted:      #6b6258;
+  --border:     #ccc6b8;
+  --green:      #2a6b3a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── MASTHEAD ─────────────────────────────────────────────── */
+.masthead {
+  background: var(--paper);
+  border-bottom: 3px double var(--rule);
+  padding: 0 2.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.masthead-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0 0.6rem;
+}
+.brand { display: flex; flex-direction: column; line-height: 1; }
+.brand-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.masthead-nav { display: flex; gap: 0; align-items: center; overflow-x: auto; }
+.nav-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.3rem 0.9rem;
+  border-left: 1px solid var(--border);
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.nav-link:first-child { border-left: none; }
+.nav-link:hover { color: var(--blue); }
+.dateline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: uppercase;
+  border-top: 1px solid var(--border);
+  padding: 0.3rem 0;
+  text-align: right;
+}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 2.5rem 2.5rem 2rem;
+  border-bottom: 4px solid var(--gold);
+}
+.hero-kicker {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.hero-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  max-width: 680px;
+  margin-bottom: 0.75rem;
+}
+.hero-body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.88rem;
+  color: #bbb;
+  max-width: 620px;
+  line-height: 1.65;
+}
+.hero-body a { color: var(--gold); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ── JUMP NAV ─────────────────────────────────────────────── */
+.state-jump-nav {
+  background: var(--paper-dark);
+  border-bottom: 1.5px solid var(--rule);
+  padding: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  position: sticky;
+  top: 68px;
+  z-index: 100;
+  scrollbar-width: none;
+}
+.state-jump-nav::-webkit-scrollbar { display: none; }
+.jump-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-right: 1.2rem;
+  border-right: 1px solid var(--border);
+  margin-right: 0.25rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.jump-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  color: var(--muted);
+  padding: 0.6rem 0.9rem;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+.jump-link:hover { color: var(--ink); border-bottom-color: var(--border); }
+.jump-link.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 500; }
+.jump-link .jflag { font-size: 0.85rem; }
+
+/* ── PAGE BODY ────────────────────────────────────────────── */
+.page-body { display: block; }
+.main { max-width: 1200px; margin: 0 auto; }
+
+/* ── TOPIC SECTION ────────────────────────────────────────── */
+.topic-section {
+  border-bottom: 2px solid var(--rule);
+  padding: 2rem 2.5rem 2.5rem;
+}
+.topic-section:last-child { border-bottom: none; }
+
+.topic-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+.topic-icon { font-size: 2.2rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem; }
+.topic-header-text { flex: 1; }
+.topic-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.topic-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+/* ── NARRATIVE ────────────────────────────────────────────── */
+.narrative {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem 2.5rem;
+  padding: 1.25rem 0 1.5rem;
+  margin-bottom: 1.5rem;
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+}
+.narrative-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.narrative-headline::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 2px;
+  background: var(--gold);
+  margin-bottom: 0.55rem;
+}
+.narrative-body { font-size: 0.82rem; color: #3a3530; line-height: 1.7; }
+.narrative-body p { margin-bottom: 0.55rem; }
+.narrative-body p:last-child { margin-bottom: 0; }
+.narrative-body strong { font-weight: 600; color: var(--ink); }
+.narrative-body a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; transition: color 0.12s; }
+.narrative-body a:hover { color: var(--gold); }
+.narrative-body ul { margin: 0.4rem 0 0.55rem 0; padding-left: 0; list-style: none; }
+.narrative-body ul:last-child { margin-bottom: 0; }
+.narrative-body ul li { position: relative; padding-left: 1rem; margin-bottom: 0.28rem; }
+.narrative-body ul li::before { content: '—'; position: absolute; left: 0; color: var(--gold); font-weight: 500; font-size: 0.72rem; top: 0.06em; }
+
+/* ── FILTER BAR ───────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--white);
+  padding: 0.55rem 0.8rem;
+  border: 1.5px solid var(--ink);
+  border-bottom: none;
+}
+.search-input {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.65rem;
+  border: 1.5px solid var(--border);
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  width: 200px;
+  transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--blue); }
+.filter-select {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.67rem;
+  padding: 0.3rem 0.55rem;
+  border: 1.5px solid var(--border);
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  cursor: pointer;
+}
+.row-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; color: var(--muted); margin-left: auto; }
+.export-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.75rem;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.export-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ── TABLE ────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; border: 1.5px solid var(--ink); }
+table { width: 100%; border-collapse: collapse; font-size: 0.76rem; background: var(--white); }
+thead { background: var(--ink); color: var(--paper); }
+th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.57rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.1s;
+}
+th:hover { background: var(--blue); }
+th.asc::after { content: ' \u2191'; opacity: 0.6; }
+th.desc::after { content: ' \u2193'; opacity: 0.6; }
+tbody tr { border-bottom: 1px solid var(--paper-dark); transition: background 0.08s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #fff9f0; }
+tbody tr:nth-child(even) { background: #faf7f1; }
+tbody tr:nth-child(even):hover { background: #fff9f0; }
+td {
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 0.45rem 0.85rem;
+  border-right: 1px solid var(--paper-dark);
+  vertical-align: top;
+}
+td:last-child, th:last-child { border-right: none; }
+
+/* Description column wraps */
+td.col-description {
+  white-space: normal;
+  max-width: 340px;
+  line-height: 1.5;
+  font-size: 0.72rem;
+}
+td.col-nowrap {
+  white-space: nowrap;
+}
+
+td a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
+td a:hover { color: var(--gold); }
+
+/* ── STATUS BADGES ────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.55rem;
+  white-space: nowrap;
+}
+.badge-pass     { background: #e6f4ea; color: var(--green); }
+.badge-fail     { background: #fdecea; color: var(--red); }
+.badge-onballot { background: var(--blue-lt); color: var(--blue); }
+.badge-pending  { background: #fdf6e3; color: var(--gold); }
+
+/* ── PAGINATION ───────────────────────────────────────────── */
+.pagination { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0; justify-content: flex-end; }
+.pg-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  padding: 0.28rem 0.7rem;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.pg-btn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+.pg-btn:disabled { opacity: 0.3; cursor: default; }
+.pg-info { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; color: var(--muted); padding: 0 0.5rem; }
+
+/* ── LOADING ──────────────────────────────────────────────── */
+.sheet-status {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  background: var(--white);
+  border: 1.5px solid var(--ink);
+  border-top: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--ink);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer {
+  border-top: 3px double var(--rule);
+  padding: 1.5rem 2.5rem;
+  background: var(--paper-dark);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 860px) { .narrative { grid-template-columns: 1fr; gap: 0.6rem; } }
+@media (max-width: 600px) {
+  .masthead, .topic-section { padding-left: 1rem; padding-right: 1rem; }
+  .state-jump-nav { padding: 0 1rem; }
+  .hero { padding: 1.5rem 1rem; }
+  .masthead-nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <span class="brand-eyebrow">Progress Report</span>
+      <span class="brand-name">On the Ballot</span>
+    </div>
+    <nav class="masthead-nav" id="mastheadNav"></nav>
+  </div>
+  <div class="dateline" id="dateline"></div>
+</header>
+
+<section class="hero">
+  <span class="hero-kicker">2026 Ballot Initiatives</span>
+  <h1 class="hero-headline">Tracking ballot initiatives that could reshape policy from the ground up.</h1>
+  <p class="hero-body">On the Ballot monitors progressive ballot initiative opportunities across states and cities in 2026 — organized by issue area. This is a project of <a href="http://www.progressreport.news" target="_blank" rel="noopener">Progress Report newsletter</a>.</p>
+</section>
+
+<nav class="state-jump-nav" id="jumpNav">
+  <span class="jump-label">Jump to</span>
+</nav>
+
+<div class="page-body">
+  <main class="main" id="mainContent"></main>
+</div>
+
+<footer>
+  <span>On the Ballot · 2026 Ballot Initiatives</span>
+  <span id="footerDate"></span>
+</footer>
+
+<script>
+const PAGE_SIZE = 50;
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  MARKDOWN RENDERER
+// ─────────────────────────────────────────────────────────────────────────────
+function renderMarkdown(md) {
+  var lines = md.split('\n'), out = [], inList = false;
+  var fmt = function(s) {
+    return s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  };
+  for (var i = 0; i < lines.length; i++) {
+    var t = lines[i].trim();
+    if (/^[-*]\s+/.test(t)) {
+      if (!inList) { out.push('<ul>'); inList = true; }
+      out.push('<li>' + fmt(t.replace(/^[-*]\s+/, '')) + '</li>');
+    } else {
+      if (inList) { out.push('</ul>'); inList = false; }
+      if (t) out.push('<p>' + fmt(t) + '</p>');
+    }
+  }
+  if (inList) out.push('</ul>');
+  return out.join('');
+}
+
+// =============================================================================
+//
+//   ██████╗ ███╗   ██╗    ████████╗██╗  ██╗███████╗    ██████╗  █████╗ ██╗     ██╗      ██████╗ ████████╗
+//   ██╔═══██╗████╗  ██║    ╚══██╔══╝██║  ██║██╔════╝    ██╔══██╗██╔══██╗██║     ██║     ██╔═══██╗╚══██╔══╝
+//   ██║   ██║██╔██╗ ██║       ██║   ███████║█████╗      ██████╔╝███████║██║     ██║     ██║   ██║   ██║
+//   ██║   ██║██║╚██╗██║       ██║   ██╔══██║██╔══╝      ██╔══██╗██╔══██║██║     ██║     ██║   ██║   ██║
+//   ╚██████╔╝██║ ╚████║       ██║   ██║  ██║███████╗    ██████╔╝██║  ██║███████╗███████╗╚██████╔╝   ██║
+//    ╚═════╝ ╚═╝  ╚═══╝       ╚═╝   ╚═╝  ╚═╝╚══════╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝    ╚═╝
+//
+//   THIS IS THE ONLY SECTION YOU NEED TO EDIT.
+//   Everything below the "STOP EDITING" line is hands-off.
+//
+// =============================================================================
+//
+//  GOOGLE API KEY (needed for clickable hyperlinks from Google Sheets cells)
+//  ──────────────────────────────────────────────────────────────────────────
+//  1. Go to https://console.cloud.google.com
+//  2. Create a project → Enable "Google Sheets API"
+//  3. Credentials → Create API Key → copy it here
+//
+var GOOGLE_API_KEY = '';  // ← paste your API key here
+
+var GOOGLE_API_KEY = '';  // ← paste your Google API key here (same one as Flip Seats)
+
+//
+//  HOW TO ADD A TOPIC
+//  ───────────────────
+//  Each topic is one block in the TOPICS list. Each topic has one table
+//  showing all initiatives in that category across states and cities.
+//
+//  TOPIC FIELDS:
+//    id                slug for page links — lowercase, hyphens, no spaces
+//    name              display name e.g. 'Housing & Rent'
+//    icon              emoji shown next to the topic name
+//    narrativeHeadline italic pull-quote headline (optional)
+//    narrativeBody     paragraph text (**bold**, [link](url), - bullet, \n\n = paragraph)
+//    sheet             one Google Sheet for this topic (or use inline rows)
+//
+//  SHEET FIELDS:
+//    url               Google Sheets URL, or 'DEMO' for the rows below
+//    headers           column names — use exactly these five:
+//                        'Initiative', 'Jurisdiction', 'Date', 'Description', 'Status'
+//    rows              one array per initiative (when url is 'DEMO')
+//
+//  STATUS VALUES — these get colored automatically:
+//    'On ballot'                → blue
+//    'Passed' / 'Approved'      → green
+//    'Failed' / 'Defeated'      → red
+//    'Qualifying' / 'Pending' / 'Gathering signatures' / 'Exploratory' → gold
+//
+//  CONNECTING A GOOGLE SHEET:
+//  1. Share → "Anyone with the link can view"
+//  2. File → Share → Publish to web → CSV (for best results)
+//  3. Paste the URL as:  url: 'https://docs.google.com/...'
+//
+// =============================================================================
+var TOPICS = [
+  {
+    id: 'tax-wealthy',
+    name: 'Tax the Wealthy',
+    icon: '\uD83D\uDCB0',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=787125878',
+    },
+  },
+  {
+    id: 'economic-justice',
+    name: 'Economic Justice',
+    icon: '\u2696\uFE0F',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=1862341304',
+    },
+  },
+  {
+    id: 'education',
+    name: 'Education',
+    icon: '\uD83C\uDF93',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=981912516',
+    },
+  },
+  {
+    id: 'housing',
+    name: 'Housing',
+    icon: '\uD83C\uDFE0',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=98531754',
+    },
+  },
+  {
+    id: 'public-transit',
+    name: 'Public Transit',
+    icon: '\uD83D\uDE8C',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=1209429096',
+    },
+  },
+  {
+    id: 'environment',
+    name: 'Environment',
+    icon: '\uD83C\uDF3F',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=693225214',
+    },
+  },
+  {
+    id: 'data-centers-ai',
+    name: 'Data Centers & AI',
+    icon: '\uD83E\uDD16',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=521181472',
+    },
+  },
+  {
+    id: 'voting-democracy',
+    name: 'Voting & Democracy',
+    icon: '\uD83D\uDDF3\uFE0F',
+    narrativeHeadline: '',
+    narrativeBody: '',
+    sheet: {
+      url: 'https://docs.google.com/spreadsheets/d/1Xv7TYo0eV81OfW62H8qV9D-hppn2xSn9/?gid=728194009',
+    },
+  },
+];
+
+// =============================================================================
+//   STOP EDITING HERE — everything below is the engine that runs the site.
+//   You don't need to touch any of it.
+// =============================================================================
+
+function cellText(cell) {
+  return typeof cell === 'object' && cell !== null ? (cell.text || '') : String(cell != null ? cell : '');
+}
+
+function fetchSheetViaAPI(sheetId, gid) {
+  var dataUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + sheetId
+    + '?includeGridData=true'
+    + '&fields=sheets(properties(sheetId),data(rowData(values(formattedValue,hyperlink))))'
+    + '&key=' + GOOGLE_API_KEY;
+  return fetch(dataUrl)
+    .then(function(r) { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+    .then(function(json) {
+      var targetGid = parseInt(gid, 10);
+      var sheet = null;
+      if (json.sheets) {
+        for (var i = 0; i < json.sheets.length; i++) {
+          var props = json.sheets[i].properties;
+          if (props && (props.sheetId === targetGid || (targetGid === 0 && i === 0))) {
+            sheet = json.sheets[i]; break;
+          }
+        }
+        if (!sheet) sheet = json.sheets[0];
+      }
+      if (!sheet || !sheet.data || !sheet.data[0] || !sheet.data[0].rowData) throw new Error('Empty');
+      var allRows = sheet.data[0].rowData.map(function(row) {
+        return (row.values || []).map(function(cell) {
+          var text = cell.formattedValue || '', url = cell.hyperlink || null;
+          return url ? { text: text, url: url } : text;
+        });
+      });
+      var headers = allRows[0].map(function(c) { return typeof c === 'object' ? c.text : c; });
+      return { headers: headers, rows: allRows.slice(1) };
+    });
+}
+
+function fetchSheetViaGviz(sheetId, gid) {
+  return fetch('https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?tqx=out:json&gid=' + gid)
+    .then(function(r) { return r.text(); })
+    .then(function(text) {
+      var json = JSON.parse(text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, ''));
+      var table = json.table;
+      var headers = table.cols.map(function(c) { return c.label || c.id; });
+      var rows = table.rows.map(function(row) {
+        return (row.c || []).map(function(cell) { return cell ? (cell.f != null ? cell.f : cell.v != null ? cell.v : '') : ''; });
+      });
+      return { headers: headers, rows: rows };
+    })
+    .catch(function() {
+      return fetch('https://docs.google.com/spreadsheets/d/' + sheetId + '/export?format=csv&gid=' + gid)
+        .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function(text) {
+          var parsed = parseCSV(text);
+          if (!parsed.length) throw new Error('Empty');
+          return { headers: parsed[0], rows: parsed.slice(1) };
+        });
+    });
+}
+
+function fetchSheet(sheetCfg) {
+  if (sheetCfg.url && sheetCfg.url !== 'DEMO') {
+    var idMatch = sheetCfg.url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)\/?/);
+    if (!idMatch) return Promise.reject(new Error('Invalid URL'));
+    var sheetId = idMatch[1];
+    var gidMatch = sheetCfg.url.match(/[#&?]gid=(\d+)/);
+    var gid = gidMatch ? gidMatch[1] : '0';
+    var promise = GOOGLE_API_KEY
+      ? fetchSheetViaAPI(sheetId, gid).catch(function() { return fetchSheetViaGviz(sheetId, gid); })
+      : fetchSheetViaGviz(sheetId, gid);
+    return promise;
+  }
+  return Promise.resolve({ headers: sheetCfg.headers || [], rows: sheetCfg.rows || [] });
+}
+
+function parseCSV(text) {
+  var rows = [], lines = text.split(/\r?\n/);
+  for (var i = 0; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    var cols = [], cur = '', inQ = false;
+    for (var j = 0; j < lines[i].length; j++) {
+      var c = lines[i][j];
+      if (c === '"') inQ = !inQ;
+      else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+      else cur += c;
+    }
+    cols.push(cur);
+    rows.push(cols);
+  }
+  return rows;
+}
+
+function statusBadge(val) {
+  var lv = val.toLowerCase().trim();
+  if (/^(passed|approved|enacted|enacted \/ defend)/.test(lv)) return '<span class="badge badge-pass">' + val + '</span>';
+  if (/^(failed|rejected|defeated|blocked|blocked \/ did not qualify)/.test(lv)) return '<span class="badge badge-fail">' + val + '</span>';
+  if (/qualified for ballot|on ballot/.test(lv)) return '<span class="badge badge-onballot">' + val + '</span>';
+  if (/collecting|gathering|exploring|exploratory|qualifying|pending|filed/.test(lv)) return '<span class="badge badge-pending">' + val + '</span>';
+  return val;
+}
+
+function buildTable(data, section) {
+  var headers = data.headers, rows = data.rows;
+  var sortCol = -1, sortDir = 1, page = 0;
+  var filtered = rows.slice();
+
+  // Identify special columns
+  var descIdx = headers.map(function(h) { return h.toLowerCase(); }).indexOf('description');
+  var statusIdx = headers.map(function(h) { return h.toLowerCase(); }).indexOf('status');
+
+  function render() {
+    var pageRows = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+    var total = filtered.length;
+    section.querySelector('.row-count').textContent = total.toLocaleString() + ' row' + (total !== 1 ? 's' : '');
+
+    var head = section.querySelector('thead tr');
+    head.innerHTML = '';
+    headers.forEach(function(h, i) {
+      var th = document.createElement('th');
+      th.textContent = h;
+      if (sortCol === i) th.className = sortDir === 1 ? 'asc' : 'desc';
+      (function(idx) {
+        th.onclick = function() { sortCol === idx ? sortDir *= -1 : (sortCol = idx, sortDir = 1); applyFilter(); };
+      })(i);
+      head.appendChild(th);
+    });
+
+    var body = section.querySelector('tbody');
+    body.innerHTML = '';
+    if (!pageRows.length) {
+      var tr = document.createElement('tr');
+      var td = document.createElement('td');
+      td.colSpan = headers.length;
+      td.style.cssText = 'text-align:center;padding:1.5rem;color:var(--muted)';
+      td.textContent = 'No rows match.';
+      tr.appendChild(td); body.appendChild(tr);
+    } else {
+      pageRows.forEach(function(row) {
+        var tr = document.createElement('tr');
+        headers.forEach(function(h, ci) {
+          var td = document.createElement('td');
+          var raw = row[ci] != null ? row[ci] : '';
+          var val, linkUrl;
+          if (typeof raw === 'object' && raw !== null) {
+            val = raw.text || ''; linkUrl = raw.url || null;
+          } else {
+            val = String(raw);
+            linkUrl = /^https?:\/\//i.test(val.trim()) ? val.trim() : null;
+          }
+
+          if (ci === descIdx) td.className = 'col-description';
+          else td.className = 'col-nowrap';
+
+          if (linkUrl) {
+            var a = document.createElement('a');
+            a.href = linkUrl; a.target = '_blank'; a.rel = 'noopener'; a.textContent = val;
+            td.appendChild(a);
+          } else if (ci === statusIdx) {
+            td.innerHTML = statusBadge(val);
+          } else {
+            td.textContent = val;
+          }
+          td.title = val;
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    var pg = section.querySelector('.pagination');
+    pg.innerHTML = '';
+    var pages = Math.ceil(total / PAGE_SIZE);
+    if (pages > 1) {
+      var prev = document.createElement('button');
+      prev.className = 'pg-btn'; prev.textContent = '\u2190 Prev'; prev.disabled = page === 0;
+      prev.onclick = function() { page--; render(); };
+      pg.appendChild(prev);
+      var info = document.createElement('span'); info.className = 'pg-info';
+      info.textContent = (page + 1) + ' / ' + pages; pg.appendChild(info);
+      var next = document.createElement('button');
+      next.className = 'pg-btn'; next.textContent = 'Next \u2192'; next.disabled = page >= pages - 1;
+      next.onclick = function() { page++; render(); };
+      pg.appendChild(next);
+    }
+  }
+
+  function applyFilter() {
+    var search = section.querySelector('.search-input').value.toLowerCase();
+    var ci = section.querySelector('.col-sel').value;
+    var cv = section.querySelector('.val-sel').value;
+    filtered = rows.filter(function(row) {
+      if (search && !row.some(function(c) { return cellText(c).toLowerCase().indexOf(search) >= 0; })) return false;
+      if (ci !== '' && cv !== '' && cellText(row[ci]) !== cv) return false;
+      return true;
+    });
+    if (sortCol >= 0) {
+      filtered = filtered.slice().sort(function(a, b) {
+        var av = cellText(a[sortCol]), bv = cellText(b[sortCol]);
+        var an = parseFloat(av), bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return (an - bn) * sortDir;
+        return av.localeCompare(bv) * sortDir;
+      });
+    }
+    page = 0; render();
+  }
+
+  var cs = section.querySelector('.col-sel');
+  var vs = section.querySelector('.val-sel');
+  cs.innerHTML = '<option value="">All columns</option>';
+  headers.forEach(function(h, i) {
+    var o = document.createElement('option'); o.value = i; o.textContent = h; cs.appendChild(o);
+  });
+  cs.onchange = function() {
+    vs.innerHTML = '<option value="">All values</option>';
+    if (cs.value !== '') {
+      var seen = {};
+      rows.forEach(function(r) { var v = cellText(r[cs.value]); seen[v] = true; });
+      Object.keys(seen).sort().forEach(function(v) {
+        var o = document.createElement('option'); o.value = v; o.textContent = v || '(empty)'; vs.appendChild(o);
+      });
+    }
+    applyFilter();
+  };
+  vs.onchange = applyFilter;
+  section.querySelector('.search-input').oninput = applyFilter;
+  section.querySelector('.export-btn').onclick = function() {
+    var csv = [headers].concat(filtered).map(function(r) {
+      return r.map(function(c) { return '"' + cellText(c).replace(/"/g, '""') + '"'; }).join(',');
+    }).join('\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.download = 'data.csv'; a.click();
+  };
+
+  render();
+}
+
+function buildPage() {
+  var nav     = document.getElementById('mastheadNav');
+  var jumpNav = document.getElementById('jumpNav');
+  var main    = document.getElementById('mainContent');
+
+  TOPICS.forEach(function(topic) {
+    // Nav + jump nav
+    var a = document.createElement('a');
+    a.className = 'nav-link'; a.href = '#' + topic.id; a.textContent = topic.name;
+    nav.appendChild(a);
+
+    var jl = document.createElement('a');
+    jl.className = 'jump-link'; jl.href = '#' + topic.id;
+    jl.innerHTML = '<span class="jflag">' + topic.icon + '</span>' + topic.name;
+    jumpNav.appendChild(jl);
+
+    // Section
+    var section = document.createElement('section');
+    section.className = 'topic-section'; section.id = topic.id;
+
+    var html = '<div class="topic-header">'
+      + '<div class="topic-icon">' + topic.icon + '</div>'
+      + '<div class="topic-header-text">'
+      + '<div class="topic-name">' + topic.name + '</div>'
+      + '<div class="topic-meta">2026 Ballot Initiatives</div>'
+      + '</div></div>';
+
+    if (topic.narrativeHeadline) {
+      html += '<div class="narrative">'
+        + '<div class="narrative-headline">' + topic.narrativeHeadline + '</div>'
+        + '<div class="narrative-body">' + renderMarkdown(topic.narrativeBody || '') + '</div>'
+        + '</div>';
+    }
+    html += '<div class="filter-bar">'
+      + '<input class="search-input" type="text" placeholder="Search\u2026">'
+      + '<select class="filter-select col-sel"></select>'
+      + '<select class="filter-select val-sel"></select>'
+      + '<button class="export-btn">CSV \u2193</button>'
+      + '<span class="row-count"></span>'
+      + '</div>'
+      + '<div class="table-wrap"><table><thead><tr></tr></thead><tbody></tbody></table></div>'
+      + '<div class="pagination"></div>';
+
+    section.innerHTML = html;
+    main.appendChild(section);
+
+    // Load data
+    var tw = section.querySelector('.table-wrap');
+    tw.innerHTML = '<div class="sheet-status"><span class="spinner"></span>Loading\u2026</div>';
+    fetchSheet(topic.sheet).then(function(data) {
+      tw.innerHTML = '<table><thead><tr></tr></thead><tbody></tbody></table>';
+      buildTable(data, section);
+    }).catch(function(err) {
+      tw.innerHTML = '<div class="sheet-status">Could not load: ' + err.message + '</div>';
+    });
+  });
+
+  // Jump nav active on scroll
+  var sections  = document.querySelectorAll('.topic-section');
+  var jumpLinks = document.querySelectorAll('.jump-link');
+  sections.forEach(function(s) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting)
+          jumpLinks.forEach(function(l) { l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id); });
+      });
+    }, { threshold: 0.15 }).observe(s);
+  });
+}
+
+document.getElementById('dateline').textContent =
+  new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase();
+document.getElementById('footerDate').textContent =
+  'Updated ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+buildPage();
+</script>
+</body>
+</html>
