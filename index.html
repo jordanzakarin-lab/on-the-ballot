@@ -363,6 +363,8 @@ td a:hover { color: var(--gold); }
 .badge-fail     { background: #fdecea; color: var(--red); }
 .badge-onballot { background: var(--blue-lt); color: var(--blue); }
 .badge-pending  { background: #fdf6e3; color: var(--gold); }
+.badge-submitted { background: #ede8f5; color: #5b3fa6; }
+.badge-challenge { background: #fef3e2; color: #b85c00; }
 
 /* ── PAGINATION ───────────────────────────────────────────── */
 .pagination { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0; justify-content: flex-end; }
@@ -601,7 +603,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1P0SYZH-BYkNXAg6lIyGTgZ1oqnf7N9oq96h3UqAlPXM/?gid=693225214',
+      url: 'https://docs.google.com/spreadsheets/d/1P0SYZH-BYkNXAg6lIyGTgZ1oqnf7N9oq96h3UqAlPXM/?gid=1209429096',
     },
   },
   {
@@ -611,7 +613,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1P0SYZH-BYkNXAg6lIyGTgZ1oqnf7N9oq96h3UqAlPXM/?gid=521181472',
+      url: 'https://docs.google.com/spreadsheets/d/1P0SYZH-BYkNXAg6lIyGTgZ1oqnf7N9oq96h3UqAlPXM/?gid=693225214',
     },
   },
   {
@@ -621,7 +623,7 @@ var TOPICS = [
     narrativeHeadline: '',
     narrativeBody: '',
     sheet: {
-      url: 'https://docs.google.com/spreadsheets/d/1P0SYZH-BYkNXAg6lIyGTgZ1oqnf7N9oq96h3UqAlPXM/?gid=728194009',
+      url: 'https://docs.google.com/spreadsheets/d/1P0SYZH-BYkNXAg6lIyGTgZ1oqnf7N9oq96h3UqAlPXM/?gid=521181472',
     },
   },
 ];
@@ -736,14 +738,17 @@ function parseCSV(text) {
 
 function statusBadge(val) {
   var lv = val.toLowerCase().trim();
-  if (/^(passed|approved|enacted|enacted \/ defend)/.test(lv)) return '<span class="badge badge-pass">Enacted</span>';
-  if (/^(failed|rejected|defeated|blocked|blocked \/ did not qualify)/.test(lv)) return '<span class="badge badge-fail">Blocked</span>';
-  if (/qualified for ballot|on ballot/.test(lv)) return '<span class="badge badge-onballot">Qualified</span>';
-  if (/collecting/.test(lv)) return '<span class="badge badge-pending">Collecting</span>';
-  if (/gathering/.test(lv)) return '<span class="badge badge-pending">Gathering</span>';
-  if (/exploring|filed/.test(lv)) return '<span class="badge badge-pending">Exploring</span>';
-  if (/qualifying/.test(lv)) return '<span class="badge badge-pending">Qualifying</span>';
-  if (/pending/.test(lv)) return '<span class="badge badge-pending">Pending</span>';
+  if (/passed|approved|enacted/.test(lv))           return '<span class="badge badge-pass">Enacted</span>';
+  if (/failed|rejected|defeated/.test(lv))          return '<span class="badge badge-fail">Failed</span>';
+  if (/blocked|did not qualify/.test(lv))           return '<span class="badge badge-fail">Blocked</span>';
+  if (/legal challenge|challenged/.test(lv))        return '<span class="badge badge-challenge">Challenged</span>';
+  if (/qualified for ballot|on ballot/.test(lv))    return '<span class="badge badge-onballot">Qualified</span>';
+  if (/signatures submitted|submitted/.test(lv))    return '<span class="badge badge-submitted">Submitted</span>';
+  if (/collecting/.test(lv))                        return '<span class="badge badge-pending">Collecting</span>';
+  if (/gathering/.test(lv))                         return '<span class="badge badge-pending">Gathering</span>';
+  if (/exploring|filed/.test(lv))                   return '<span class="badge badge-pending">Exploring</span>';
+  if (/qualifying/.test(lv))                        return '<span class="badge badge-pending">Qualifying</span>';
+  if (/pending/.test(lv))                           return '<span class="badge badge-pending">Pending</span>';
   return val;
 }
 
