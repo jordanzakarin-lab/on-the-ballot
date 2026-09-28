@@ -365,6 +365,8 @@ td a:hover { color: var(--gold); }
 .badge-pending  { background: #fdf6e3; color: var(--gold); }
 .badge-submitted { background: #ede8f5; color: #5b3fa6; }
 .badge-challenge { background: #fef3e2; color: #b85c00; }
+.badge-pulled   { background: #ece9e4; color: var(--muted); }
+.badge-struck   { background: #f3e6ec; color: #8a2d52; }
 
 /* ── PAGINATION ───────────────────────────────────────────── */
 .pagination { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0; justify-content: flex-end; }
@@ -748,6 +750,9 @@ function parseCSV(text) {
 
 function statusBadge(val) {
   var lv = val.toLowerCase().trim();
+  if (/pulled/.test(lv))                            return '<span class="badge badge-pulled">Pulled</span>';
+  if (/tossed by state official/.test(lv))        return '<span class="badge badge-fail">Tossed by state official</span>';
+  if (/approved,?\s*struck down/.test(lv))            return '<span class="badge badge-struck">Approved, Struck</span>';
   if (/passed|approved|enacted/.test(lv))           return '<span class="badge badge-pass">Enacted</span>';
   if (/failed|rejected|defeated/.test(lv))          return '<span class="badge badge-fail">Failed</span>';
   if (/blocked|did not qualify/.test(lv))           return '<span class="badge badge-fail">Blocked</span>';
