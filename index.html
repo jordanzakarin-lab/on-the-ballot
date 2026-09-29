@@ -367,6 +367,7 @@ td a:hover { color: var(--gold); }
 .badge-challenge { background: #fef3e2; color: #b85c00; }
 .badge-pulled   { background: #ece9e4; color: var(--muted); }
 .badge-struck   { background: #f3e6ec; color: #8a2d52; }
+.badge-deal     { background: #e0f2f1; color: #1f6b66; }
 
 /* ── PAGINATION ───────────────────────────────────────────── */
 .pagination { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0; justify-content: flex-end; }
@@ -630,7 +631,7 @@ var TOPICS = [
   },
   {
     id: 'civil-rights',
-    name: 'Civil Rights & Reproductive Justice',
+    name: 'Civil Rights',
     icon: '\u270A',
     narrativeHeadline: '',
     narrativeBody: '',
@@ -750,6 +751,7 @@ function parseCSV(text) {
 
 function statusBadge(val) {
   var lv = val.toLowerCase().trim();
+  if (/deal reached/.test(lv))                      return '<span class="badge badge-deal">Deal Reached</span>';
   if (/pulled/.test(lv))                            return '<span class="badge badge-pulled">Pulled</span>';
   if (/tossed by state official/.test(lv))        return '<span class="badge badge-fail">Tossed by state official</span>';
   if (/approved,?\s*struck down/.test(lv))            return '<span class="badge badge-struck">Approved, Struck</span>';
